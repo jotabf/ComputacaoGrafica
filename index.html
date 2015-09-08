@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <meta charset="UTF-8">
+    <title>Computacaografica by jotabf</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <title>Computacaografica by jotabf</title>
   </head>
-
   <body>
-    <header>
-      <div class="inner">
-        <h1>Computacaografica</h1>
-        <h2>Trabalhos de Programação</h2>
-        <a href="https://github.com/jotabf/ComputacaoGrafica" class="button"><small>View project on</small> GitHub</a>
-      </div>
-    </header>
+    <section class="page-header">
+      <h1 class="project-name">Computacaografica</h1>
+      <h2 class="project-tagline">Trabalhos de Programação</h2>
+      <a href="https://github.com/jotabf/ComputacaoGrafica" class="btn">View on GitHub</a>
+      <a href="https://github.com/jotabf/ComputacaoGrafica/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/jotabf/ComputacaoGrafica/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <div id="content-wrapper">
-      <div class="inner clearfix">
-        <section id="main-content">
-          <h1>
+    <section class="main-content">
+      <h1>
 <a id="solução-de-exercícios" class="anchor" href="#solu%C3%A7%C3%A3o-de-exerc%C3%ADcios" aria-hidden="true"><span class="octicon octicon-link"></span></a>Solução de Exercícios</h1>
 
 <p>João Batista - 2012919966</p>
@@ -60,6 +51,93 @@ $ quadrados4
 <h4>
 <a id="c-código" class="anchor" href="#c-c%C3%B3digo" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
 
+<div class="highlight highlight-c"><pre>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">timer</span>(<span class="pl-k">int</span>);
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+
+<span class="pl-c">/* cores do quadrado */</span>
+GLfloat r=<span class="pl-c1">1.0</span>, g=<span class="pl-c1">0.5</span>, b=<span class="pl-c1">0.0</span>;
+GLfloat a, u, c;
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_DOUBLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (argv[<span class="pl-c1">0</span>]);
+    <span class="pl-c">// inicia um temporizador. após 33ms ativa a funcao timer</span>
+    <span class="pl-c1">glutTimerFunc</span>(<span class="pl-c1">33</span>, timer, <span class="pl-c1">1</span>);
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">0.0</span>);
+    <span class="pl-c1">glShadeModel</span> (GL_FLAT);
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">0</span>, <span class="pl-c1">1</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);
+    <span class="pl-c1">glutDisplayFunc</span>(display);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+<span class="pl-k">void</span> <span class="pl-en">timer</span>(<span class="pl-k">int</span> value){
+    r=r+<span class="pl-c1">0.01</span>;
+    g=g+<span class="pl-c1">0.01</span>;
+    b=b+<span class="pl-c1">0.01</span>;
+
+    a=r+<span class="pl-c1">0.5</span>; 
+    u=g+<span class="pl-c1">0.5</span>; 
+    c=b+<span class="pl-c1">0.5</span>;
+
+    <span class="pl-k">if</span>(a&gt;<span class="pl-c1">1</span>) a-=<span class="pl-c1">1</span>;
+    <span class="pl-k">if</span>(u&gt;<span class="pl-c1">1</span>) u-=<span class="pl-c1">1</span>;
+    <span class="pl-k">if</span>(c&gt;<span class="pl-c1">1</span>) c-=<span class="pl-c1">1</span>;
+
+    <span class="pl-k">if</span>(r&gt;<span class="pl-c1">1</span>) r=<span class="pl-c1">0</span>;
+    <span class="pl-k">if</span>(g&gt;<span class="pl-c1">1</span>) g=<span class="pl-c1">0</span>;
+    <span class="pl-k">if</span>(b&gt;<span class="pl-c1">1</span>) b=<span class="pl-c1">0</span>;
+    <span class="pl-c1">glutPostRedisplay</span>();
+    <span class="pl-c1">glutTimerFunc</span>(<span class="pl-c1">33</span>, timer, <span class="pl-c1">1</span>);
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-k">int</span> i;
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">glColor3f</span> (r, g, b);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.1</span>,<span class="pl-c1">0.1</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.5</span>,<span class="pl-c1">0.1</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.5</span>,<span class="pl-c1">0.5</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.1</span>,<span class="pl-c1">0.5</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glColor3f</span> (a, u, c);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.25</span>,<span class="pl-c1">0.25</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.75</span>,<span class="pl-c1">0.25</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.75</span>,<span class="pl-c1">0.75</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.25</span>,<span class="pl-c1">0.75</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glColor3f</span> (<span class="pl-c1">0.25</span>,<span class="pl-c1">0.2</span>,<span class="pl-c1">0.8</span>);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.75</span>,<span class="pl-c1">0.75</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">1</span>,<span class="pl-c1">0.75</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">1</span>,<span class="pl-c1">1</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.75</span>,<span class="pl-c1">1</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glColor3f</span> (<span class="pl-c1">0.1</span>,<span class="pl-c1">0.5</span>,<span class="pl-c1">0.2</span>);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.3</span>,<span class="pl-c1">0.3</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.2</span>,<span class="pl-c1">0.3</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.2</span>,<span class="pl-c1">0.2</span>);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.3</span>,<span class="pl-c1">0.2</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glFlush</span>();
+    <span class="pl-c1">glutSwapBuffers</span>(); 
+}</pre></div>
+
 <h3>
 <a id="12-programa-quadrados-color" class="anchor" href="#12-programa-quadrados-color" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.2. Programa "Quadrados Color"</h3>
 
@@ -84,6 +162,83 @@ $ quadradoscolor
 
 <h4>
 <a id="c-código-1" class="anchor" href="#c-c%C3%B3digo-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
+
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>math.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">timer</span>(<span class="pl-k">int</span>);
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+
+GLfloat <span class="pl-en">rad</span>(<span class="pl-k">int</span> teta){<span class="pl-k">return</span> (<span class="pl-c1">3.14159265359</span>*teta)/<span class="pl-c1">180</span>.;}
+<span class="pl-c">/* cores do quadrado */</span>
+GLfloat r[<span class="pl-c1">4</span>],   g[<span class="pl-c1">4</span>],   b[<span class="pl-c1">4</span>];
+<span class="pl-k">int</span> h[<span class="pl-c1">4</span>] = {<span class="pl-c1">0.0</span>,<span class="pl-c1">50.0</span>,<span class="pl-c1">100.0</span>,<span class="pl-c1">150.0</span>};
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_DOUBLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (argv[<span class="pl-c1">0</span>]);
+    <span class="pl-c">// inicia um temporizador. após 33ms ativa a funcao timer</span>
+    <span class="pl-c1">glutTimerFunc</span>(<span class="pl-c1">33</span>, timer, <span class="pl-c1">1</span>);
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">0.0</span>);
+    <span class="pl-c">//glShadeModel (GL_FLAT);</span>
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">1</span>, <span class="pl-c1">0</span>, <span class="pl-c1">1</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);
+    <span class="pl-c1">glutDisplayFunc</span>(display);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+<span class="pl-k">void</span> <span class="pl-en">timer</span>(<span class="pl-k">int</span> value){
+
+
+    <span class="pl-k">for</span>(<span class="pl-k">int</span> j=<span class="pl-c1">0</span>; j&lt;<span class="pl-c1">4</span>; j++){     
+
+        h[j] = h[j] + <span class="pl-c1">10</span>.;
+        <span class="pl-k">if</span>(h[j]&gt;=<span class="pl-c1">360</span>) h[j] = h[j]%<span class="pl-c1">360</span>; 
+
+        <span class="pl-k">if</span>(h[j]&gt;=<span class="pl-c1">0</span> &amp;&amp; h[j]&lt;<span class="pl-c1">120</span>){            
+            b[j] = .<span class="pl-c1">25</span>;
+            r[j] = .<span class="pl-c1">5</span> + .<span class="pl-c1">25</span>*<span class="pl-c1">cos</span>(<span class="pl-c1">rad</span>(h[j]))/<span class="pl-c1">cos</span>(<span class="pl-c1">rad</span>(<span class="pl-c1">60</span>)-<span class="pl-c1">rad</span>(h[j]));
+            g[j] = <span class="pl-c1">1.5</span> - (r[j] + .<span class="pl-c1">25</span>);
+        }<span class="pl-k">else</span> <span class="pl-k">if</span>(h[j]&lt;<span class="pl-c1">240</span>){
+            r[j] = .<span class="pl-c1">25</span>;
+            g[j] = .<span class="pl-c1">25</span> + .<span class="pl-c1">25</span>*<span class="pl-c1">cos</span>(<span class="pl-c1">rad</span>(h[j])-<span class="pl-c1">rad</span>(<span class="pl-c1">120</span>))/<span class="pl-c1">cos</span>(<span class="pl-c1">rad</span>(<span class="pl-c1">180</span>)-<span class="pl-c1">rad</span>(h[j]));
+            b[j] = <span class="pl-c1">1.5</span> - (.<span class="pl-c1">25</span> + g[j]);
+        }<span class="pl-k">else</span> <span class="pl-k">if</span>(h[j]&lt;<span class="pl-c1">360</span>){
+            g[j] = .<span class="pl-c1">25</span>;
+            b[j] = .<span class="pl-c1">5</span> + .<span class="pl-c1">25</span>*<span class="pl-c1">cos</span>(<span class="pl-c1">rad</span>(h[j])-<span class="pl-c1">rad</span>(<span class="pl-c1">240</span>))/<span class="pl-c1">cos</span>(<span class="pl-c1">rad</span>(<span class="pl-c1">300</span>)-<span class="pl-c1">rad</span>(h[j]));
+            r[j] = <span class="pl-c1">1.5</span> - (.<span class="pl-c1">25</span> + b[j]);
+        }
+    <span class="pl-k">while</span>(r[j] &gt; <span class="pl-c1">1</span>) r[j] = r[j] - <span class="pl-c1">1</span>.;
+    <span class="pl-k">while</span>(g[j] &gt; <span class="pl-c1">1</span>) g[j] = g[j] - <span class="pl-c1">1</span>.;
+    <span class="pl-k">while</span>(b[j] &gt; <span class="pl-c1">1</span>) b[j] = b[j] - <span class="pl-c1">1</span>.;
+
+    }
+    <span class="pl-c1">glutPostRedisplay</span>();
+    <span class="pl-c1">glutTimerFunc</span>(<span class="pl-c1">33</span>, timer, <span class="pl-c1">1</span>);
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-k">int</span> i;
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glColor3f</span> (r[<span class="pl-c1">0</span>], g[<span class="pl-c1">0</span>], b[<span class="pl-c1">0</span>]);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.1</span>,<span class="pl-c1">0.1</span>);
+    <span class="pl-c1">glColor3f</span> (r[<span class="pl-c1">1</span>], g[<span class="pl-c1">1</span>], b[<span class="pl-c1">1</span>]);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.9</span>,<span class="pl-c1">0.1</span>);
+    <span class="pl-c1">glColor3f</span> (r[<span class="pl-c1">2</span>], g[<span class="pl-c1">2</span>], b[<span class="pl-c1">2</span>]);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.9</span>,<span class="pl-c1">0.9</span>);
+    <span class="pl-c1">glColor3f</span> (r[<span class="pl-c1">3</span>], g[<span class="pl-c1">3</span>], b[<span class="pl-c1">3</span>]);
+    <span class="pl-c1">glVertex2f</span>(<span class="pl-c1">0.1</span>,<span class="pl-c1">0.9</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glFlush</span>();
+    <span class="pl-c1">glutSwapBuffers</span>(); 
+}</pre></div>
 
 <h2>
 <a id="2-desenhando-linhas-e-pontos" class="anchor" href="#2-desenhando-linhas-e-pontos" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. Desenhando Linhas e Pontos</h2>
@@ -113,6 +268,68 @@ $ quadrado
 <h4>
 <a id="c-código-2" class="anchor" href="#c-c%C3%B3digo-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
 
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdio.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+GLfloat r = <span class="pl-c1">1.0</span>, b = <span class="pl-c1">0.0</span>;
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_SINGLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (<span class="pl-s"><span class="pl-pds">"</span>Desenhando uma linha<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">init</span>();
+    <span class="pl-c1">glutDisplayFunc</span>(display); 
+    <span class="pl-c1">glutKeyboardFunc</span>(keyboard);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">256</span>, <span class="pl-c1">0</span>, <span class="pl-c1">256</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-k">int</span> i;
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">glColor3f</span> (r, <span class="pl-c1">0.0</span>, b);
+    <span class="pl-c1">glBegin</span>(GL_LINES);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">30</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">30</span>);
+    <span class="pl-c1">glBegin</span>(GL_LINES);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">30</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glBegin</span>(GL_LINES);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">226</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glBegin</span>(GL_LINES);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">226</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">30</span>);
+
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glFlush</span>();
+}
+
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y){
+
+    <span class="pl-k">switch</span> (key) {
+        <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>:
+            r = <span class="pl-c1">0.0</span>;
+            b = <span class="pl-c1">1.0</span>;
+            <span class="pl-k">break</span>;
+        <span class="pl-k">case</span> <span class="pl-s"><span class="pl-pds">'</span>r<span class="pl-pds">'</span></span>:
+            r = <span class="pl-c1">1.0</span>;
+            b = <span class="pl-c1">0.0</span>;
+            <span class="pl-k">break</span>;
+    <span class="pl-k">case</span> <span class="pl-c1">27</span>:
+            <span class="pl-c1">exit</span>(<span class="pl-c1">0</span>);
+        <span class="pl-k">break</span>;
+  }
+    <span class="pl-c1">display</span>();
+}</pre></div>
+
 <h3>
 <a id="22-programa-bresenham-linhas" class="anchor" href="#22-programa-bresenham-linhas" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.2. Programa "Bresenham linhas"</h3>
 
@@ -138,6 +355,84 @@ $ bresenhamlinha
 <h4>
 <a id="c-código-3" class="anchor" href="#c-c%C3%B3digo-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
 
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>math.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">setPixel</span>(<span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+<span class="pl-k">void</span> <span class="pl-en">bresenham</span>(<span class="pl-k">int</span> x1, <span class="pl-k">int</span> y1, <span class="pl-k">int</span> x2, <span class="pl-k">int</span> y2);
+<span class="pl-k">int</span> <span class="pl-en">Sinal</span>(<span class="pl-k">int</span> x){ <span class="pl-k">if</span>(x &gt;= <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">1</span>; <span class="pl-k">else</span> <span class="pl-k">return</span> -<span class="pl-c1">1</span>;}
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_SINGLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (<span class="pl-s"><span class="pl-pds">"</span>Desenhando uma linha<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">init</span>();
+    <span class="pl-c1">glutDisplayFunc</span>(display);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+<span class="pl-k">void</span> <span class="pl-en">setPixel</span>(<span class="pl-k">int</span> x, <span class="pl-k">int</span> y){  
+    <span class="pl-c1">glColor3f</span> (<span class="pl-c1">0.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">0.0</span>);
+    <span class="pl-c1">glBegin</span>(GL_POINTS);
+    <span class="pl-c1">glVertex2i</span>(x,y);
+    <span class="pl-c1">glEnd</span>();
+}
+<span class="pl-k">void</span> <span class="pl-en">bresenham</span>(<span class="pl-k">int</span> x1, <span class="pl-k">int</span> y1, <span class="pl-k">int</span> x2, <span class="pl-k">int</span> y2){
+    <span class="pl-k">int</span> Temp, new_e, Troca;     
+    <span class="pl-k">int</span> x = x1;
+    <span class="pl-k">int</span> y = <span class="pl-c1">y1</span>;
+    <span class="pl-k">int</span> Delta_x = <span class="pl-c1">abs</span>(x2 - x1);
+    <span class="pl-k">int</span> Delta_y = <span class="pl-c1">abs</span>(y2 - <span class="pl-c1">y1</span>);
+    <span class="pl-k">int</span> s1 = <span class="pl-c1">Sinal</span>(x2 - x1);
+    <span class="pl-k">int</span> s2 = <span class="pl-c1">Sinal</span>(y2 - <span class="pl-c1">y1</span>);
+    <span class="pl-k">if</span>(Delta_y &gt; Delta_x){
+        Temp = Delta_x;
+        Delta_x = Delta_y;
+        Delta_y = Temp;
+        Troca = <span class="pl-c1">1</span>;
+    }
+    <span class="pl-k">else</span>{
+       Troca = <span class="pl-c1">0</span>;
+    }
+    new_e = <span class="pl-c1">2</span>*Delta_y - Delta_x;
+    <span class="pl-k">for</span>(<span class="pl-k">int</span> i=<span class="pl-c1">1</span>; i&lt;= Delta_x; i++){
+        <span class="pl-c1">setPixel</span>(x,y);
+        <span class="pl-k">while</span> (new_e &gt;= <span class="pl-c1">0</span>){
+            <span class="pl-k">if</span>(Troca == <span class="pl-c1">1</span>){
+                x = x + s1;
+            }
+            <span class="pl-k">else</span>{
+                y = y + s2;
+            }
+            new_e = new_e - <span class="pl-c1">2</span>*Delta_x;
+        }
+
+        <span class="pl-k">if</span>(Troca == <span class="pl-c1">1</span>){
+            y = y + s2;
+        }
+        <span class="pl-k">else</span>{
+            x = x + s1;
+        }
+        new_e = new_e + <span class="pl-c1">2</span>*Delta_y;
+    }
+}
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">256</span>, <span class="pl-c1">0</span>, <span class="pl-c1">256</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">bresenham</span>(<span class="pl-c1">40</span>,<span class="pl-c1">200</span>,<span class="pl-c1">200</span>,<span class="pl-c1">10</span>);
+    <span class="pl-c1">glFlush</span>();
+}</pre></div>
+
 <h3>
 <a id="23-programa-bresenham-circunferências" class="anchor" href="#23-programa-bresenham-circunfer%C3%AAncias" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.3. Programa "Bresenham Circunferências"</h3>
 
@@ -161,6 +456,88 @@ $ bresenhamcircu  </p>
 <h4>
 <a id="c-código-4" class="anchor" href="#c-c%C3%B3digo-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
 
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>math.h<span class="pl-pds">&gt;</span></span>
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">setPixel</span>(<span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+<span class="pl-k">void</span> <span class="pl-en">bresenham</span>(<span class="pl-k">int</span> x1, <span class="pl-k">int</span> y1, <span class="pl-k">int</span> x2, <span class="pl-k">int</span> y2);
+<span class="pl-k">int</span> <span class="pl-en">Sinal</span>(<span class="pl-k">int</span> x){ <span class="pl-k">if</span>(x &gt;= <span class="pl-c1">0</span>) <span class="pl-k">return</span> <span class="pl-c1">1</span>; <span class="pl-k">else</span> <span class="pl-k">return</span> -<span class="pl-c1">1</span>;}
+<span class="pl-k">void</span> <span class="pl-en">pontosDaCircunferencia</span>(<span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_SINGLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (<span class="pl-s"><span class="pl-pds">"</span>Desenhando uma linha<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">init</span>();
+    <span class="pl-c1">glutDisplayFunc</span>(display);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+<span class="pl-k">void</span> <span class="pl-en">setPixel</span>(<span class="pl-k">int</span> x, <span class="pl-k">int</span> y){  
+    <span class="pl-c1">glColor3f</span> (<span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glBegin</span>(GL_POINTS);
+    <span class="pl-c1">glVertex2i</span>(x,y);
+    <span class="pl-c1">glEnd</span>();
+}
+<span class="pl-k">void</span> <span class="pl-en">pontosDaCircunferencia</span>(<span class="pl-k">int</span> x, <span class="pl-k">int</span> y, <span class="pl-k">int</span> x0, <span class="pl-k">int</span> y0){
+    <span class="pl-c1">setPixel</span>(x+x0,y+<span class="pl-c1">y0</span>);
+    <span class="pl-c1">setPixel</span>(-x+x0,y+<span class="pl-c1">y0</span>);
+    <span class="pl-c1">setPixel</span>(x+x0,-y+<span class="pl-c1">y0</span>);
+    <span class="pl-c1">setPixel</span>(-x+x0,-y+<span class="pl-c1">y0</span>);
+}
+<span class="pl-k">void</span> <span class="pl-en">bresenham</span>(<span class="pl-k">int</span> x0, <span class="pl-k">int</span> y0, <span class="pl-k">int</span> raio){
+    <span class="pl-k">int</span> x = <span class="pl-c1">0</span>;
+    <span class="pl-k">int</span> y = raio;
+    <span class="pl-k">int</span> d = <span class="pl-c1">1</span> - raio;
+    <span class="pl-c1">pontosDaCircunferencia</span>(x,y,x0,<span class="pl-c1">y0</span>);
+    <span class="pl-k">while</span>(y &gt; x){
+        <span class="pl-k">if</span>(d &lt; <span class="pl-c1">0</span>){
+            d = d + <span class="pl-c1">2</span>*x + <span class="pl-c1">3</span>;
+            x = x + <span class="pl-c1">1</span>;
+        }
+        <span class="pl-k">else</span>{
+            d = d + <span class="pl-c1">2</span>*(x-y) + <span class="pl-c1">5</span>;
+            x = x + <span class="pl-c1">1</span>;
+            y = y - <span class="pl-c1">1</span>;
+        }
+        <span class="pl-c1">pontosDaCircunferencia</span>(x,y,x0,<span class="pl-c1">y0</span>);
+    }
+    y = <span class="pl-c1">0</span>;
+    x = raio;
+    d = <span class="pl-c1">1</span> - raio;
+    <span class="pl-c1">pontosDaCircunferencia</span>(x,y,x0,<span class="pl-c1">y0</span>);
+    <span class="pl-k">while</span>(x &gt; y){
+        <span class="pl-k">if</span>(d &lt; <span class="pl-c1">0</span>){
+            d = d + <span class="pl-c1">2</span>*y + <span class="pl-c1">3</span>;
+            y = y + <span class="pl-c1">1</span>;
+        }
+        <span class="pl-k">else</span>{
+            d = d + <span class="pl-c1">2</span>*(y-x) + <span class="pl-c1">5</span>;
+            y = y + <span class="pl-c1">1</span>;
+            x = x - <span class="pl-c1">1</span>;
+        }
+        <span class="pl-c1">pontosDaCircunferencia</span>(x,y,x0,<span class="pl-c1">y0</span>);
+    }
+}
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>){
+  <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>);
+  <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">256</span>, <span class="pl-c1">0</span>, <span class="pl-c1">256</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">setPixel</span>(<span class="pl-c1">128</span>,<span class="pl-c1">128</span>);
+    <span class="pl-c1">bresenham</span>(<span class="pl-c1">128</span>,<span class="pl-c1">128</span>,<span class="pl-c1">50</span>);
+    <span class="pl-c1">glFlush</span>();
+}</pre></div>
+
 <h2>
 <a id="3-preenchendo-regiões" class="anchor" href="#3-preenchendo-regi%C3%B5es" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. Preenchendo regiões</h2>
 
@@ -175,18 +552,165 @@ $ bresenhamcircu  </p>
 <a href="https://www.dropbox.com/s/fp9d35bt37ebl19/selecao.c?dl=0">selecao.c</a><br>
 </li>
 <li>
-<p><a href="https://www.dropbox.com/s/wgqv3tpa4ow4xau/Makefile?dl=0">Makefile</a>  </p>
-
-<h4>
-<a id="b-como-compilar-e-executar-4" class="anchor" href="#b-como-compilar-e-executar-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>b) Como compilar e executar</h4>
-
-<p>$ make selecao<br>
-$ selecao  </p>
+<a href="https://www.dropbox.com/s/wgqv3tpa4ow4xau/Makefile?dl=0">Makefile</a><br>
 </li>
 </ul>
 
 <h4>
+<a id="b-como-compilar-e-executar-4" class="anchor" href="#b-como-compilar-e-executar-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>b) Como compilar e executar</h4>
+
+<pre><code>$ make selecao  
+$ selecao  
+</code></pre>
+
+<h4>
 <a id="c-código-5" class="anchor" href="#c-c%C3%B3digo-5" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
+
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+
+GLfloat r_b[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>}, g_b[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>}, b_b[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>};
+GLfloat r_f[<span class="pl-c1">4</span>]={<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>}, g_f[<span class="pl-c1">4</span>]={<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>}, b_f[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>};
+<span class="pl-k">char</span> printColor;
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+<span class="pl-k">void</span> <span class="pl-en">mouse</span>(<span class="pl-k">int</span> button, <span class="pl-k">int</span> state, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_DOUBLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (<span class="pl-s"><span class="pl-pds">"</span>Preenchendo regiões<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">init</span>();
+    <span class="pl-c1">glutDisplayFunc</span>(display); 
+    <span class="pl-c1">glutKeyboardFunc</span>(keyboard);
+    <span class="pl-c1">glutMouseFunc</span>(mouse);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">256</span>, <span class="pl-c1">0</span>, <span class="pl-c1">256</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);  
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-k">int</span> i;
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">glDisable</span>(GL_POLYGON_STIPPLE);
+
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">0</span>], g_f[<span class="pl-c1">0</span>], b_f[<span class="pl-c1">0</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">226</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">143</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">0</span>], g_b[<span class="pl-c1">0</span>], b_b[<span class="pl-c1">0</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">226</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">143</span>); 
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">1</span>], g_f[<span class="pl-c1">1</span>], b_f[<span class="pl-c1">1</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">226</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">143</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">1</span>], g_b[<span class="pl-c1">1</span>], b_b[<span class="pl-c1">1</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">226</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">143</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">2</span>], g_f[<span class="pl-c1">2</span>], b_f[<span class="pl-c1">2</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);  
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">2</span>], g_b[<span class="pl-c1">2</span>], b_b[<span class="pl-c1">2</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">3</span>], g_f[<span class="pl-c1">3</span>], b_f[<span class="pl-c1">3</span>]);
+    <span class="pl-c1">glPolygonStipple</span>(tux);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">3</span>], g_b[<span class="pl-c1">3</span>], b_b[<span class="pl-c1">3</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glFlush</span>();
+    <span class="pl-c1">glutSwapBuffers</span>();
+}
+
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y){
+  <span class="pl-k">switch</span> (key) {
+        <span class="pl-k">case</span> <span class="pl-c1">98</span>:
+            printColor = <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>;
+            <span class="pl-k">break</span>;
+        <span class="pl-k">case</span> <span class="pl-c1">102</span>:
+            printColor = <span class="pl-s"><span class="pl-pds">'</span>f<span class="pl-pds">'</span></span>;
+            <span class="pl-k">break</span>;
+        <span class="pl-k">case</span> <span class="pl-c1">27</span>:
+            <span class="pl-c1">exit</span>(<span class="pl-c1">0</span>);
+        <span class="pl-k">break</span>;
+  }
+}
+
+<span class="pl-k">void</span> <span class="pl-en">mouse</span>(<span class="pl-k">int</span> button, <span class="pl-k">int</span> state, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y){
+    <span class="pl-k">int</span> n = <span class="pl-c1">5</span>;
+    <span class="pl-k">switch</span> (button) {
+        <span class="pl-k">case</span> GLUT_LEFT_BUTTON:
+            <span class="pl-k">if</span> (state == GLUT_DOWN &amp;&amp; printColor == <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>) {
+                <span class="pl-k">if</span>( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                    n = <span class="pl-c1">2</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                    n = <span class="pl-c1">3</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                    n = <span class="pl-c1">0</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                    n = <span class="pl-c1">1</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">break</span>;
+                r_b[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+                g_b[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+                b_b[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+                <span class="pl-c1">glutPostRedisplay</span>();
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> (state == GLUT_DOWN &amp;&amp; printColor == <span class="pl-s"><span class="pl-pds">'</span>f<span class="pl-pds">'</span></span>) {
+                <span class="pl-k">if</span>( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                    n = <span class="pl-c1">2</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                    n = <span class="pl-c1">3</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                    n = <span class="pl-c1">0</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                    n = <span class="pl-c1">1</span>;
+                }<span class="pl-k">else</span> <span class="pl-k">break</span>;
+                r_f[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+                g_f[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+                b_f[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+                <span class="pl-c1">glutPostRedisplay</span>();        
+            }
+        <span class="pl-k">break</span>;
+    }
+}</pre></div>
 
 <h3>
 <a id="32-programa-seleção-com-buffer-simples" class="anchor" href="#32-programa-sele%C3%A7%C3%A3o-com-buffer-simples" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.2. Programa "Seleção" com buffer simples</h3>
@@ -213,6 +737,155 @@ $ selecaoSimples
 <h4>
 <a id="c-código-6" class="anchor" href="#c-c%C3%B3digo-6" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
 
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
+
+GLubyte tux[] = {
+};
+
+GLfloat r_b[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>}, g_b[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>}, b_b[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>};
+GLfloat r_f[<span class="pl-c1">4</span>]={<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>}, g_f[<span class="pl-c1">4</span>]={<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>,<span class="pl-c1">1.0</span>}, b_f[<span class="pl-c1">4</span>]={<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>,<span class="pl-c1">0.0</span>};
+<span class="pl-k">char</span> printColor;
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+<span class="pl-k">void</span> <span class="pl-en">mouse</span>(<span class="pl-k">int</span> button, <span class="pl-k">int</span> state, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y);
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_SINGLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">256</span>, <span class="pl-c1">256</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">100</span>, <span class="pl-c1">100</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (<span class="pl-s"><span class="pl-pds">"</span>Preenchendo regiões<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">init</span>();
+    <span class="pl-c1">glutDisplayFunc</span>(display); 
+    <span class="pl-c1">glutKeyboardFunc</span>(keyboard);
+    <span class="pl-c1">glutMouseFunc</span>(mouse);
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">256</span>, <span class="pl-c1">0</span>, <span class="pl-c1">256</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);  
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-k">int</span> i;
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">glDisable</span>(GL_POLYGON_STIPPLE);
+
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">0</span>], g_f[<span class="pl-c1">0</span>], b_f[<span class="pl-c1">0</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">226</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">143</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">0</span>], g_b[<span class="pl-c1">0</span>], b_b[<span class="pl-c1">0</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">226</span>);  <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">143</span>); 
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">1</span>], g_f[<span class="pl-c1">1</span>], b_f[<span class="pl-c1">1</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">226</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">143</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">1</span>], g_b[<span class="pl-c1">1</span>], b_b[<span class="pl-c1">1</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">226</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">226</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">143</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">143</span>);
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">2</span>], g_f[<span class="pl-c1">2</span>], b_f[<span class="pl-c1">2</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);  
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">2</span>], g_b[<span class="pl-c1">2</span>], b_b[<span class="pl-c1">2</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">113</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">30</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+
+
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_FILL);
+    <span class="pl-c1">glColor3f</span>(r_f[<span class="pl-c1">3</span>], g_f[<span class="pl-c1">3</span>], b_f[<span class="pl-c1">3</span>]);
+    <span class="pl-c1">glPolygonStipple</span>(tux);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glPolygonMode</span>(GL_BACK, GL_LINE);
+    <span class="pl-c1">glColor3f</span>(r_b[<span class="pl-c1">3</span>], g_b[<span class="pl-c1">3</span>], b_b[<span class="pl-c1">3</span>]);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">113</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">113</span>);
+    <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">226</span>,<span class="pl-c1">30</span>); <span class="pl-c1">glVertex2i</span>(<span class="pl-c1">143</span>,<span class="pl-c1">30</span>); 
+    <span class="pl-c1">glEnd</span>();
+
+    <span class="pl-c1">glFlush</span>();
+    <span class="pl-c1">glutSwapBuffers</span>();
+}
+
+<span class="pl-k">void</span> <span class="pl-en">keyboard</span>(<span class="pl-k">unsigned</span> <span class="pl-k">char</span> key, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y){
+  <span class="pl-k">switch</span> (key) {
+        <span class="pl-k">case</span> <span class="pl-c1">98</span>:
+            printColor = <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>;
+            <span class="pl-k">break</span>;
+        <span class="pl-k">case</span> <span class="pl-c1">102</span>:
+            printColor = <span class="pl-s"><span class="pl-pds">'</span>f<span class="pl-pds">'</span></span>;
+            <span class="pl-k">break</span>;
+        <span class="pl-k">case</span> <span class="pl-c1">27</span>:
+            <span class="pl-c1">exit</span>(<span class="pl-c1">0</span>);
+        <span class="pl-k">break</span>;
+  }
+}
+
+<span class="pl-k">void</span> <span class="pl-en">mouse</span>(<span class="pl-k">int</span> button, <span class="pl-k">int</span> state, <span class="pl-k">int</span> x, <span class="pl-k">int</span> y){
+    <span class="pl-k">int</span> n = <span class="pl-c1">5</span>;
+  <span class="pl-k">switch</span> (button) {
+  <span class="pl-k">case</span> GLUT_LEFT_BUTTON:
+        <span class="pl-k">if</span> (state == GLUT_DOWN &amp;&amp; printColor == <span class="pl-s"><span class="pl-pds">'</span>b<span class="pl-pds">'</span></span>) {
+            <span class="pl-k">if</span>( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                n = <span class="pl-c1">2</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                n = <span class="pl-c1">3</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                n = <span class="pl-c1">0</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                n = <span class="pl-c1">1</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">break</span>;
+            r_b[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+            g_b[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+            b_b[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+            <span class="pl-c1">glutPostRedisplay</span>();
+        }<span class="pl-k">else</span> <span class="pl-k">if</span> (state == GLUT_DOWN &amp;&amp; printColor == <span class="pl-s"><span class="pl-pds">'</span>f<span class="pl-pds">'</span></span>) {
+            <span class="pl-k">if</span>( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                n = <span class="pl-c1">2</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">143</span> &amp; y&lt;=<span class="pl-c1">226</span> ){
+                n = <span class="pl-c1">3</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">30</span> &amp; x&lt;=<span class="pl-c1">113</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                n = <span class="pl-c1">0</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">if</span> ( x&gt;=<span class="pl-c1">143</span> &amp; x&lt;=<span class="pl-c1">226</span> &amp; y&gt;=<span class="pl-c1">30</span> &amp; y&lt;=<span class="pl-c1">113</span> ){
+                n = <span class="pl-c1">1</span>;
+            }<span class="pl-k">else</span> <span class="pl-k">break</span>;
+            r_f[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+            g_f[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+            b_f[n]=(GLfloat)<span class="pl-c1">rand</span>()/(RAND_MAX+<span class="pl-c1">1.0</span>);
+            <span class="pl-c1">glutPostRedisplay</span>();        
+        }
+    <span class="pl-k">break</span>;
+  }
+}</pre></div>
+
 <h3>
 <a id="33-programa-iniciais-hexágono-com-as-iniciais" class="anchor" href="#33-programa-iniciais-hex%C3%A1gono-com-as-iniciais" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.3. Programa "Iniciais" (Hexágono com as iniciais)</h3>
 
@@ -237,24 +910,97 @@ $ iniciais
 
 <h4>
 <a id="c-código-7" class="anchor" href="#c-c%C3%B3digo-7" aria-hidden="true"><span class="octicon octicon-link"></span></a>c) Código</h4>
-        </section>
 
-        <aside id="sidebar">
-          <a href="https://github.com/jotabf/ComputacaoGrafica/zipball/master" class="button">
-            <small>Download</small>
-            .zip file
-          </a>
-          <a href="https://github.com/jotabf/ComputacaoGrafica/tarball/master" class="button">
-            <small>Download</small>
-            .tar.gz file
-          </a>
+<div class="highlight highlight-c"><pre>#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>GL/glut.h<span class="pl-pds">&gt;</span></span>
+#<span class="pl-k">include</span> <span class="pl-s"><span class="pl-pds">&lt;</span>stdlib.h<span class="pl-pds">&gt;</span></span>
 
-          <p class="repo-owner"><a href="https://github.com/jotabf/ComputacaoGrafica"></a> is maintained by <a href="https://github.com/jotabf">jotabf</a>.</p>
+GLubyte tux[] = {
+0x0, 0x0,  0x0,  0x0,
+0x0, 0x0,  0x0,  0x0,
+0x0, 0x0,  0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xFE, 0x0,  0x0,
+0x0, 0xFE, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xC0, 0x0,  0x0,
+0x0, 0xFF, 0xF8, 0x0,
+0x0, 0xFF, 0xF8, 0x0,
+0x7, 0xe0, 0x3f, 0x0,
+0xE, 0x70, 0x3F, 0xC0,
+0xC, 0x30, 0x30, 0xE0,
+0xC, 0x30, 0x30, 0x70,
+0x0, 0x30, 0x30, 0xE0,
+0x0, 0x30, 0x3F, 0xC0,
+0x0, 0x30, 0x3F, 0x80,
+0x0, 0x30, 0x30, 0xE0,
+0x0, 0x30, 0x30, 0x70,
+0x0, 0x30, 0x30, 0x38,
+<span class="pl-c1">0xF</span>, 0xFF, 0xFF, 0xF0,
+<span class="pl-c1">0xF</span>, 0xFF, 0xFF, 0xE0,
+0x0, 0x0, 0x0, 0x0,
+0x0, 0x0, 0x0, 0x0,
+0x0, 0x0, 0x0, 0x0,
+0x0, 0x0, 0x0, 0x0,
+0x0, 0x0, 0x0, 0x0
+};
 
-          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
-        </aside>
-      </div>
-    </div>
+GLfloat r,g,b;
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>);
+<span class="pl-k">void</span> <span class="pl-en">hexagono</span>();
+
+<span class="pl-k">int</span> <span class="pl-en">main</span>(<span class="pl-k">int</span> argc, <span class="pl-k">char</span>** argv){
+    <span class="pl-c1">glutInit</span>(&amp;argc, argv);
+    <span class="pl-c1">glutInitDisplayMode</span> (GLUT_DOUBLE | GLUT_RGB);
+    <span class="pl-c1">glutInitWindowSize</span> (<span class="pl-c1">300</span>, <span class="pl-c1">300</span>); 
+    <span class="pl-c1">glutInitWindowPosition</span> (<span class="pl-c1">200</span>, <span class="pl-c1">200</span>); 
+    <span class="pl-c1">glutCreateWindow</span> (<span class="pl-s"><span class="pl-pds">"</span>Preenchendo regiões<span class="pl-pds">"</span></span>);
+    <span class="pl-c1">init</span>();
+    <span class="pl-c1">glutDisplayFunc</span>(display); 
+    <span class="pl-c1">glutMainLoop</span>();
+    <span class="pl-k">return</span> <span class="pl-c1">0</span>;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">init</span>(<span class="pl-k">void</span>){
+    <span class="pl-c1">glClearColor</span>(<span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glOrtho</span> (<span class="pl-c1">0</span>, <span class="pl-c1">256</span>, <span class="pl-c1">0</span>, <span class="pl-c1">256</span>, -<span class="pl-c1">1</span> ,<span class="pl-c1">1</span>);
+    r=<span class="pl-c1">0</span>; g=<span class="pl-c1">1</span>; b=<span class="pl-c1">0</span>;
+}
+
+<span class="pl-k">void</span> <span class="pl-en">display</span>(<span class="pl-k">void</span>){
+    <span class="pl-k">int</span> x = <span class="pl-c1">125</span>;
+    <span class="pl-k">int</span> y = x;
+    <span class="pl-c1">glClear</span>(GL_COLOR_BUFFER_BIT);
+    <span class="pl-c1">glDisable</span>(GL_POLYGON_STIPPLE);
+
+    <span class="pl-c1">glEnable</span>(GL_POLYGON_STIPPLE);
+    <span class="pl-c1">glColor3f</span>(<span class="pl-c1">0.0</span>, <span class="pl-c1">0.0</span>, <span class="pl-c1">1.0</span>);
+    <span class="pl-c1">glPolygonStipple</span>(tux);
+    <span class="pl-c1">glBegin</span>(GL_POLYGON);
+    <span class="pl-c1">glVertex2i</span>(x,y+<span class="pl-c1">79</span>);
+    <span class="pl-c1">glVertex2i</span>(x-<span class="pl-c1">68</span>,y+<span class="pl-c1">39</span>);
+    <span class="pl-c1">glVertex2i</span>(x-<span class="pl-c1">68</span>,y-<span class="pl-c1">39</span>);
+    <span class="pl-c1">glVertex2i</span>(x,y-<span class="pl-c1">79</span>);
+    <span class="pl-c1">glVertex2i</span>(x+<span class="pl-c1">68</span>,y-<span class="pl-c1">39</span>);
+    <span class="pl-c1">glVertex2i</span>(x+<span class="pl-c1">68</span>,y+<span class="pl-c1">39</span>);
+    <span class="pl-c1">glEnd</span>();
+    <span class="pl-c1">glFlush</span>();
+    <span class="pl-c1">glutSwapBuffers</span>();
+}</pre></div>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/jotabf/ComputacaoGrafica">Computacaografica</a> is maintained by <a href="https://github.com/jotabf">jotabf</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
 
   
   </body>
